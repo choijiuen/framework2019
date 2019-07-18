@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+    "http://struts.apache.org/dtds/struts-2.3.dtd">
+ 
+ <struts>
+ 	<package name="pack01" namespace="/" extends="struts-default"> <!-- 반드시 하나 상속받아야한다. namespace는 한 depts -->
+ 		<action name="ex01" class="com.bit.action.Ex01Action">											<!-- action name 은 주소 -->
+ 			<result name="success">/index.jsp</result>										<!-- 보여줄 페이지 -->
+ 			<result name="error">/err.jsp</result>
+ 			<result name="input">/form.jsp</result>
+ 		</action>
+ 		
+ 		<action name="ex02" class="com.bit.action.Ex02Action">
+ 			<result name="success">/form.jsp</result>
+ 		</action>
+ 		<action name="ex03" class="com.bit.action.Ex03Action">	
+ 			<interceptor-ref name="params"></interceptor-ref> 	
+ 			<result name="success">/result.jsp</result>
+ 		</action>
+ 	</package>
+ 	
+ 	<package name="pack02" namespace="/next" extends="pack01">    <!-- extends="struts-default" 이거 상속 받을라고  -->
+ 		<action name="ex01" class="com.bit.action.Ex04Action">
+ 			<result name="success" type="redirectAction">		<!-- default가 success임 result name 
+ 																action 이름이 같으면? pack01의 index페이지 나오고, /next 넣어줘야 이거나옴 왜냐
+ 																					오버라이딩 됐기 때문에 
+ 																					namespace가 다를 경우만 action name 같을 수 있음 , 
+ 																					이래야지만 구분 가능하니깐
+ 			-->
+ 				<param name="id">admin</param>
+				<param name="pw">1234</param>
+ 				<param name="actionName">result</param>
+ 			</result>
+ 		</action>
+ 		
+ 		<action name="input" class="com.bit.action.InputAction">
+ 			<result name="success">/input.jsp</result>
+ 		</action>
+ 		
+ 		<action name="result" class="com.bit.action.ResultAction">
+ 			<interceptor-ref name="params"></interceptor-ref>
+ 			<result name="input">/input.jsp</result>
+ 			<!-- <result name="success" type="redirect">/ex01.action</result> /다음주소 치면 , context명 다음이다. 스트러치는 이렇다 서브렛과 다름 -->
+ 			<!--  <result name="success" type="redirectAction">ex01</result>	action 이름만 치면됨 .action 확장명 필요 없음 -->
+ 			<result name="success">/result.jsp</result>
+ 		</action>
+ 	
+ 	</package>
+ </struts>   
